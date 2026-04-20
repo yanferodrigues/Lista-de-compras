@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Listaki — Entrar</title>
+  <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
+</head>
+<body class="auth-body">
+
+<div class="auth-wrap">
+  <div class="auth-brand">
+    <div class="auth-brand-icon">🛍️</div>
+    <div>
+      <div class="auth-brand-name">Listaki</div>
+      <div class="auth-brand-tagline">Lista de Compras</div>
+    </div>
+  </div>
+
+  <div class="auth-card">
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab {% if active_tab != 'cadastro' %}active{% endif %}" onclick="showTab('login')">Entrar</button>
+      <button class="auth-tab {% if active_tab == 'cadastro' %}active{% endif %}" onclick="showTab('cadastro')">Cadastrar</button>
+    </div>
+
+    {% if error %}
+    <div class="auth-error">{{ error }}</div>
+    {% endif %}
+
+    <!-- Login form -->
+    <form id="form-login" class="auth-form {% if active_tab == 'cadastro' %}hidden{% endif %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="login" />
+      <div class="auth-field">
+        <label class="auth-label">Usuário</label>
+        <input class="auth-input" type="text" name="username" placeholder="Seu nome de usuário" autocomplete="username" required />
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">Senha</label>
+        <input class="auth-input" type="password" name="password" placeholder="Sua senha" autocomplete="current-password" required />
+      </div>
+      <button class="btn-primary auth-submit" type="submit">Entrar</button>
+    </form>
+
+    <!-- Register form -->
+    <form id="form-cadastro" class="auth-form {% if active_tab != 'cadastro' %}hidden{% endif %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="register" />
+      <div class="auth-field">
+        <label class="auth-label">Usuário</label>
+        <input class="auth-input" type="text" name="username" placeholder="Escolha um nome de usuário" autocomplete="username" required />
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">E-mail <span class="auth-optional">(opcional)</span></label>
+        <input class="auth-input" type="email" name="email" placeholder="seu@email.com" autocomplete="email" />
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">Senha</label>
+        <input class="auth-input" type="password" name="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required />
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">Confirmar senha</label>
+        <input class="auth-input" type="password" name="password2" placeholder="Repita a senha" autocomplete="new-password" required />
+      </div>
+      <button class="btn-primary auth-submit" type="submit">Criar conta</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+  function showTab(tab) {
+    const loginForm   = document.getElementById('form-login');
+    const cadastroForm = document.getElementById('form-cadastro');
+    const tabs = document.querySelectorAll('.auth-tab');
+
+    if (tab === 'login') {
+      loginForm.classList.remove('hidden');
+      cadastroForm.classList.add('hidden');
+      tabs[0].classList.add('active');
+      tabs[1].classList.remove('active');
+    } else {
+      loginForm.classList.add('hidden');
+      cadastroForm.classList.remove('hidden');
+      tabs[0].classList.remove('active');
+      tabs[1].classList.add('active');
+    }
+  }
+
+  gsap.from('.auth-brand', { opacity: 0, y: -12, duration: 0.4, ease: 'power2.out' });
+  gsap.from('.auth-card',  { opacity: 0, y: 20,  duration: 0.45, ease: 'power2.out', delay: 0.1 });
+</script>
+</body>
+</html>

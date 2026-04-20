@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Listaki — Usuário</title>
+  <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
+</head>
+<body>
+
+<div id="app">
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">🛍️</div>
+      <div>
+        <div class="brand-name">Listaki</div>
+        <div class="brand-tagline">Lista de Compras</div>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Menu</div>
+      <a href="/" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        Painel
+      </a>
+      <a href="/mercado/" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        Mercado
+        <span class="nav-badge" id="badge-mercado">0</span>
+      </a>
+      <a href="/online/" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+        </svg>
+        Online
+        <span class="nav-badge" id="badge-online">0</span>
+      </a>
+      <a href="/usuario/" class="nav-item active">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        Usuário
+      </a>
+    </div>
+    <div class="sidebar-footer">ListaViva © 2025</div>
+  </aside>
+
+  <!-- Main -->
+  <main id="main">
+    <div class="page-header">
+      <div class="eyebrow">Conta</div>
+      <h1>Meu Perfil</h1>
+      <p>Gerencie suas informações pessoais</p>
+    </div>
+
+    <!-- Logged-in user info -->
+    <div class="user-info-card">
+      <div class="user-info-avatar">{{ request.user.username|first|upper }}</div>
+      <div class="user-info-details">
+        <div class="user-info-name">{{ request.user.username }}</div>
+        {% if request.user.email %}
+        <div class="user-info-email">{{ request.user.email }}</div>
+        {% endif %}
+        <div class="user-info-meta">Membro desde {{ request.user.date_joined|date:"d/m/Y" }}</div>
+      </div>
+      <a href="/logout/" class="btn-logout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Sair
+      </a>
+    </div>
+
+    <!-- Profile card -->
+    <p class="section-label" style="margin-top:24px;">Apelido e contato</p>
+    <div class="profile-card">
+      <div class="avatar" id="avatar">{{ profile.name|first|upper }}</div>
+      <div class="profile-fields">
+        <input class="profile-field name-field"  id="profile-name"  type="text" placeholder="Seu apelido" value="{{ profile.name }}" />
+        <input class="profile-field email-field" id="profile-email" type="text" placeholder="contato@email.com" value="{{ profile.email }}" />
+        <div class="profile-hint">Clique nos campos para editar • salvo automaticamente</div>
+      </div>
+    </div>
+
+    <!-- Stats resumo -->
+    <p class="section-label">Minhas listas</p>
+    <div class="stats-grid" style="margin-bottom: 32px;">
+      <div class="stat-card">
+        <div class="s-label"><span class="stat-icon">🛒</span> Mercado</div>
+        <div class="s-value" id="stat-mercado">{{ mercado_total }}</div>
+        <div class="s-sub">itens na lista</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-label"><span class="stat-icon">🌐</span> Online</div>
+        <div class="s-value" id="stat-online">{{ online_total }}</div>
+        <div class="s-sub">itens na lista</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-label"><span class="stat-icon">✅</span> Concluídos</div>
+        <div class="s-value" id="stat-done">{{ done_total }}</div>
+        <div class="s-sub">itens marcados</div>
+      </div>
+    </div>
+
+    <!-- Danger zone -->
+    <p class="section-label">Dados</p>
+    <div class="danger-zone">
+      <div class="danger-info">
+        <div class="danger-title">Limpar todas as listas</div>
+        <div class="danger-desc">Remove permanentemente todos os itens do mercado e das compras online.</div>
+      </div>
+      <button class="btn-danger" onclick="confirmClear()">Limpar tudo</button>
+    </div>
+  </main>
+</div>
+
+<!-- Bottom nav (mobile) -->
+<nav id="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="/" class="bottom-nav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      Painel
+    </a>
+    <a href="/mercado/" class="bottom-nav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      Mercado
+    </a>
+    <a href="/online/" class="bottom-nav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+      </svg>
+      Online
+    </a>
+    <a href="/usuario/" class="bottom-nav-btn active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      Usuário
+    </a>
+  </div>
+</nav>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="{% static 'js/state.js' %}"></script>
+<script src="{% static 'js/usuario.js' %}"></script>
+</body>
+</html>

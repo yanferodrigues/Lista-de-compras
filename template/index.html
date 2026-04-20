@@ -1,0 +1,244 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Listaki — Painel</title>
+  <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
+</head>
+<body>
+
+<div id="app">
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">🛍️</div>
+      <div>
+        <div class="brand-name">Listaki</div>
+        <div class="brand-tagline">Lista de Compras</div>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Menu</div>
+      <a href="/" class="nav-item active">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        Painel
+      </a>
+      <a href="/mercado/" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        Mercado
+        <span class="nav-badge" id="badge-mercado">0</span>
+      </a>
+      <a href="/online/" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+        </svg>
+        Online
+        <span class="nav-badge" id="badge-online">0</span>
+      </a>
+      <a href="/usuario/" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        Usuário
+      </a>
+    </div>
+    <div class="sidebar-footer">ListaViva © 2025</div>
+  </aside>
+
+  <!-- Main -->
+  <main id="main">
+    <div class="page-header">
+      <div class="eyebrow">Bem-vindo de volta</div>
+      <h1 id="greeting">Olá, Usuário 👋</h1>
+      <p>Veja um resumo das suas listas de compras</p>
+    </div>
+
+    <!-- Stats -->
+    <p class="section-label">Resumo</p>
+    <div class="stats-grid" style="margin-bottom:28px;">
+      <div class="stat-card">
+        <div class="s-label"><span class="stat-icon">🛒</span> Mercado</div>
+        <div class="s-value" id="stat-mercado">0</div>
+        <div class="s-sub">itens na lista</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-label"><span class="stat-icon">🌐</span> Online</div>
+        <div class="s-value" id="stat-online">0</div>
+        <div class="s-sub">itens na lista</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-label"><span class="stat-icon">✅</span> Concluídos</div>
+        <div class="s-value" id="stat-done">0</div>
+        <div class="s-sub">itens marcados</div>
+      </div>
+    </div>
+
+    <!-- Quick add -->
+    <p class="section-label">Adicionar rápido</p>
+    <div class="quick-grid">
+      <button class="quick-card" onclick="openModal('mercado')">
+        <div class="quick-card-icon">🛒</div>
+        <div>
+          <div class="quick-card-label">Adicionar item</div>
+          <div class="quick-card-title">Lista do Mercado</div>
+        </div>
+      </button>
+      <button class="quick-card" onclick="openModal('online')">
+        <div class="quick-card-icon">🌐</div>
+        <div>
+          <div class="quick-card-label">Adicionar item</div>
+          <div class="quick-card-title">Compras Online</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- Activity -->
+    <p class="section-label" style="margin-top:28px;">Atividade recente</p>
+    <div class="activity-list" id="activity-list"></div>
+  </main>
+</div>
+
+<!-- Bottom nav (mobile) -->
+<nav id="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="/" class="bottom-nav-btn active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      Painel
+    </a>
+    <a href="/mercado/" class="bottom-nav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      Mercado
+    </a>
+    <a href="/online/" class="bottom-nav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+      </svg>
+      Online
+    </a>
+    <a href="/usuario/" class="bottom-nav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      Usuário
+    </a>
+  </div>
+</nav>
+
+<!-- Modal: Mercado (quick add) -->
+<div class="modal-overlay" id="modal-mercado">
+  <div class="modal" id="modal-mercado-inner">
+    <div class="modal-handle"></div>
+    <h2>Adicionar ao Mercado</h2>
+    <div class="form-grid">
+      <div class="form-group form-full">
+        <label>Nome do item</label>
+        <input type="text" id="m-nome" placeholder="ex: Arroz integral" />
+      </div>
+      <div class="form-group">
+        <label>Quantidade</label>
+        <input type="number" id="m-qty" value="1" min="1" />
+      </div>
+      <div class="form-group">
+        <label>Unidade</label>
+        <select id="m-unit">
+          <option value="un">un</option>
+          <option value="kg">kg</option>
+          <option value="g">g</option>
+          <option value="L">L</option>
+          <option value="ml">ml</option>
+          <option value="pct">pct</option>
+          <option value="cx">cx</option>
+        </select>
+      </div>
+      <div class="form-group form-full">
+        <label>Grupo</label>
+        <select id="m-group">
+          <option value="Geral">Geral</option>
+          <option value="Frutas &amp; Verduras">Frutas &amp; Verduras</option>
+          <option value="Laticínios">Laticínios</option>
+          <option value="Carnes">Carnes</option>
+          <option value="Padaria">Padaria</option>
+          <option value="Bebidas">Bebidas</option>
+          <option value="Limpeza">Limpeza</option>
+          <option value="Higiene">Higiene</option>
+          <option value="Congelados">Congelados</option>
+          <option value="Mercearia">Mercearia</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('mercado')">Cancelar</button>
+      <button class="btn-primary"   onclick="addMercadoQuick()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Online (quick add) -->
+<div class="modal-overlay" id="modal-online">
+  <div class="modal" id="modal-online-inner">
+    <div class="modal-handle"></div>
+    <h2>Adicionar Compra Online</h2>
+    <div class="form-grid">
+      <div class="form-group form-full">
+        <label>Nome do produto</label>
+        <input type="text" id="o-nome" placeholder="ex: Tênis Nike Air" />
+      </div>
+      <div class="form-group form-full">
+        <label>Link do produto</label>
+        <input type="url" id="o-link" placeholder="https://loja.com.br/produto" />
+      </div>
+      <div class="form-group">
+        <label>Loja / Site</label>
+        <input type="text" id="o-loja" placeholder="Amazon, Shopee…" />
+      </div>
+      <div class="form-group">
+        <label>Preço estimado (R$)</label>
+        <input type="number" id="o-preco" placeholder="0,00" step="0.01" min="0" />
+      </div>
+      <div class="form-group form-full">
+        <label>Prioridade</label>
+        <select id="o-prioridade">
+          <option value="media">Média</option>
+          <option value="alta">Alta</option>
+          <option value="baixa">Baixa</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('online')">Cancelar</button>
+      <button class="btn-primary"   onclick="addOnlineQuick()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="{% static 'js/state.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+</body>
+</html>
