@@ -18,6 +18,7 @@ const State = (() => {
     addOnline:    (data)  => apiFetch('/api/online/', { method: 'POST', body: JSON.stringify(data) }),
     patchOnline:  (id, d) => apiFetch(`/api/online/${id}/`, { method: 'PATCH', body: JSON.stringify(d) }),
     deleteOnline: (id)    => apiFetch(`/api/online/${id}/`, { method: 'DELETE' }),
+    scrapeUrl:    (url)   => apiFetch('/api/online/scrape/', { method: 'POST', body: JSON.stringify({ url }) }),
 
     getProfile:  ()     => apiFetch('/api/usuario/'),
     saveProfile: (data) => apiFetch('/api/usuario/', { method: 'POST', body: JSON.stringify(data) }),

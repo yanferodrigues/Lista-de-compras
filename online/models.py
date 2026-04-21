@@ -11,6 +11,7 @@ class ItemOnline(models.Model):
     nome       = models.CharField(max_length=200)
     link       = models.URLField(blank=True, default='')
     loja       = models.CharField(max_length=100, blank=True, default='')
+    imagem     = models.URLField(max_length=500, blank=True, default='')
     preco      = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     prioridade = models.CharField(max_length=10, choices=PRIORIDADE, default='media')
     checked    = models.BooleanField(default=False)
@@ -30,6 +31,7 @@ class ItemOnline(models.Model):
             'nome':       self.nome,
             'link':       self.link,
             'loja':       self.loja,
+            'imagem':     self.imagem,
             'preco':      float(self.preco) if self.preco is not None else 0,
             'prioridade': self.prioridade,
             'checked':    self.checked,
