@@ -21,9 +21,12 @@ static/
 # Arquivos de media enviados por usuarios
 media/
 
+
+
 # Configuracoes de IDE
 .vscode/
 .idea/
+.claude/
 
 # Sistema operacional
 .DS_Store
